@@ -35,21 +35,24 @@ func (z *ZipEntry) readClass(className string) ([]byte, Entry, error) {
 
 	for _, f := range r.File {
 		if f.Name == className {
-			rc, err := f.Open()
+			return func() ([]byte, Entry, error) {
 
-			if err != nil {
-				return nil, nil, err
-			}
+				rc, err := f.Open()
 
-			defer rc.Close()
+				if err != nil {
+					return nil, nil, err
+				}
 
-			data, err := ioutil.ReadAll(rc)
+				defer rc.Close()
 
-			if err != nil {
-				return nil, nil, err
-			}
+				data, err := ioutil.ReadAll(rc)
 
-			return data, z, err
+				if err != nil {
+					return nil, nil, err
+				}
+
+				return data, z, err
+			}()
 		}
 	}
 
