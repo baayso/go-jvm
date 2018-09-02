@@ -24,6 +24,12 @@ func newZipEntry(path string) *ZipEntry {
 	return &ZipEntry{absPath}
 }
 
+// 首先打开ZIP文件，如果这一步出错的话，直接返回。
+// 然后遍历ZIP压缩包里的文件，看能否找到class文件。
+// 如果能找到，则打开class文件，把内容读取出来，并返回。
+// 如果找不到，或者出现其他错误，则返回错误信息。
+// 有两处使用了defer语句来确保打开的文件得以关闭。
+// readClass()方法每次都要打开和关闭ZIP文件，因此效率不是很高。
 func (z *ZipEntry) readClass(className string) ([]byte, Entry, error) {
 	r, err := zip.OpenReader(z.absPath)
 
