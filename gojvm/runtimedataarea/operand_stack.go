@@ -67,6 +67,7 @@ func (o *OperandStack) PushDouble(val float64) {
 
 	o.PushLong(int64(bits))
 }
+
 func (o *OperandStack) PopDouble() float64 {
 	bits := uint64(o.PopLong())
 
@@ -88,4 +89,14 @@ func (o *OperandStack) PopRef() *Object {
 	o.slots[o.size].ref = nil
 
 	return ref
+}
+
+func (o *OperandStack) PushSlot(slot Slot) {
+	o.slots[o.size] = slot
+	o.size++
+}
+
+func (o *OperandStack) PopSlot() Slot {
+	o.size--
+	return o.slots[o.size]
 }
