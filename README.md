@@ -1,4 +1,4 @@
-# jvm
+# go-jvm
 A toy JVM written in Go.
 
 ### Please see:
